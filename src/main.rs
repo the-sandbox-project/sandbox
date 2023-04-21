@@ -1,3 +1,5 @@
+use sandbox::run;
+
 fn main() {
-    println!("Hello, world!");
+    run()
 }
