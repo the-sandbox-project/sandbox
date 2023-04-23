@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::fs::File;
+use std::fs::{File, self};
 use std::io::prelude::*;
 use std::env;
 
@@ -32,6 +32,10 @@ pub fn read_config_file() -> Result<Config, String> {
 }
 
 fn get_config_linux() -> Result<Config, String>{
+    let home_dir = env::var("HOME").unwrap();
+    let config_dir = format!("{}/.config/sandbox/", home_dir);
+    env::set_current_dir(config_dir).unwrap();
+    
     let mut file = File::open("sandbox.yml").map_err(|_| "We cannot read the sandbox.yml! Does it exist?".to_string())?;
     let mut contents = String::new();
     file.read_to_string(&mut contents).map_err(|e| e.to_string())?;
