@@ -2,12 +2,14 @@ mod editor;
 mod config;
 mod args;
 mod environment;
+mod search;
 
 use args::SandboxArgs;
 use clap::Parser;
-use environment::go_to_environment;
+use environment::setup_environment;
 
 pub fn run() { 
     let args = SandboxArgs::parse();
-    go_to_environment(args.beach_type)
+    setup_environment(args.beach_type)
+
 }
