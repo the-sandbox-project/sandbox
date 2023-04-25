@@ -13,9 +13,6 @@ pub fn open_environment(environment: String) {
     let editor = get_editor(); 
 
     let beaches_path = format!("/usr/share/sandbox/beaches/{}", environment);
-    fs::create_dir_all(&beaches_path).unwrap();
-
-    // TODO: Use Environment Variable (Set Project to Rust)
 
     env::set_current_dir(beaches_path).unwrap();
     Command::new(editor)
