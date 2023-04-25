@@ -7,6 +7,7 @@ pub fn install_environment(id: String) {
         if in_system(path) {
             println!("You already have {} installed on your system!", id)
         } else {
+            // TODO: Install the thing
             println!("I gotta do the installing")
         }
     } else {
