@@ -12,7 +12,7 @@ pub struct SandboxArgs {
     pub search: String,
 
     /// Search for Environment
-    #[clap(short, long, default_value = "")]
+    #[clap(short = 'I', long, default_value = "")]
     pub install: String,
 }
 
