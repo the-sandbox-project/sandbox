@@ -2,15 +2,16 @@ use std::fs;
 
 use serde_yaml::Value;
 
-pub fn search_environment(query: String) {
+pub fn search(query: String) {
     println!("Environments That Match Query {}\n", query);
 
-    get_search_vec(query);
+    search_environment(query);
 
     println!("\nInstall any of these with sandbox install <ENVIRONMENT>")
 }
 
-pub fn get_search_vec(query: String) {
+pub fn search_environment(query: String) {
+    let _sandbox_url = "https://raw.githubusercontent.com/the-sandbox-project/sandbox-templates/master/sandbox-templates.yml";
     let sandbox_templates_path = "../sandbox-templates/sandbox-templates.yml";
 
     let file_contents = std::fs::read_to_string(sandbox_templates_path).unwrap();
