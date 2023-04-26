@@ -34,22 +34,5 @@ pub fn setup_environment(environment: String) {
     if environment_exists {
         open_environment(environment)
     } else {
-        download_environment(environment)
     }
-}
-
-pub fn download_environment(environment: String) {
-    println!("Environment {} not found", environment);
-
-    print!("Would you like to download {}? [Y/n] ", environment);
-
-    stdout()
-        .flush()
-        .unwrap();
-
-    let mut answer: String = String::new();
-
-    stdin()
-        .read_line(&mut answer)
-        .unwrap();
 }
