@@ -30,7 +30,6 @@ pub async fn download_environment(id: String) -> Result<(), Box<dyn Error>> {
         io::copy(&mut content.as_ref(), &mut file)?;
 
         let unzip_path = format!("{}/{}", language_path, id);
-        dbg!(&unzip_path);
 
         let tar_gz = File::open(&download_path)?;
         let tar = GzDecoder::new(tar_gz);
