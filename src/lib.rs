@@ -13,10 +13,8 @@ use serde_yaml::{Value, Mapping};
 
 use environment::setup_environment;
 use install::install_environment;
-use download::download_environment;
 
 pub async fn run() { 
-    download_environment("rust-min".to_string()).await.unwrap();
     let args = SandboxArgs::parse();
 
     if !args.search.is_empty() {
