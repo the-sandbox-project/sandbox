@@ -1,11 +1,6 @@
 use std::fs;
 use std::process::Command;
 use std::env;
-use std::io::{
-    Write,
-    stdin,
-    stdout
-};
 
 use crate::editor::get_editor;
 
