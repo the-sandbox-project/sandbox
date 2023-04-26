@@ -1,4 +1,3 @@
-use serde_yaml::Value;
 use std::fs;
 
 use crate::{get_path, id_is_valid, download::download_environment};
