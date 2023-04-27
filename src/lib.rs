@@ -6,15 +6,18 @@ mod search;
 mod install;
 mod download;
 
-use args::SandboxArgs;
-use clap::Parser;
-use search::search;
-use serde_yaml::{Value, Mapping};
+use std::fs;
 
+use args::SandboxArgs;
+use search::search;
 use environment::setup_environment;
 use install::install_environment;
 
+use clap::Parser;
+use serde_yaml::{Value, Mapping};
+
 pub async fn run() { 
+    let a = get_path("go-min".to_string());
     let args = SandboxArgs::parse();
 
     if !args.search.is_empty() {
@@ -31,16 +34,19 @@ pub async fn run() {
 }
 
 pub fn get_projects_list() -> Mapping {
+    for (_, projects) in get_templates_mapping() {
+        return projects.as_mapping().unwrap().to_owned()
+    }
+    Mapping::new()
+}
+
+pub fn get_templates_mapping() -> Mapping {
     let sandbox_templates_path = "../sandbox-templates/sandbox-templates.yml";
-    let file_contents = std::fs::read_to_string(sandbox_templates_path).unwrap();
+    let file_contents = fs::read_to_string(sandbox_templates_path).unwrap();
     let templates: Value = serde_yaml::from_str(&file_contents).unwrap();
 
     if let Some(languages) = templates["languages"].as_mapping() {
-        for (_language_name, projects) in languages {
-            if let Some(projects_list) = projects.as_mapping() {
-                return projects_list.to_owned()
-            } 
-        }
+        return languages.to_owned()
     }
     Mapping::new()
 }
@@ -50,7 +56,7 @@ pub fn get_title(id: String) -> String {
         if project_id.as_str().unwrap() == id {
             return project_object["title"].as_str().unwrap().to_string();
         } 
-    } 
+    }
     String::new()
 }
 
