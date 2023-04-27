@@ -17,7 +17,8 @@ pub async fn install_environment(id: String) {
 }
 
 pub fn in_system(id: String) -> bool {
-    let environment_path = get_path(id.clone()).split("/").collect::<Vec<&str>>()[0].to_owned() + "/" + &id;
+    let environment_path = get_path(id.clone());
+    let some = environment_path.split("/").collect::<Vec<&str>>()[0].to_owned() + "/" + &id;
     let formatted_path = format!("/usr/share/sandbox/beaches/{}", environment_path);
 
     let path = Path::new(&formatted_path);
