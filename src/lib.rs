@@ -17,6 +17,7 @@ use clap::Parser;
 use serde_yaml::{Value, Mapping};
 
 pub async fn run() { 
+    let a = get_path("go-min".to_string());
     let args = SandboxArgs::parse();
 
     if !args.search.is_empty() {
@@ -33,14 +34,19 @@ pub async fn run() {
 }
 
 pub fn get_projects_list() -> Mapping {
+    for (_, projects) in get_templates_mapping() {
+        return projects.as_mapping().unwrap().to_owned()
+    }
+    Mapping::new()
+}
+
+pub fn get_templates_mapping() -> Mapping {
     let sandbox_templates_path = "../sandbox-templates/sandbox-templates.yml";
     let file_contents = fs::read_to_string(sandbox_templates_path).unwrap();
     let templates: Value = serde_yaml::from_str(&file_contents).unwrap();
 
     if let Some(languages) = templates["languages"].as_mapping() {
-        for (_, projects) in languages {
-            return projects.as_mapping().unwrap().to_owned()
-        }
+        return languages.to_owned()
     }
     Mapping::new()
 }
