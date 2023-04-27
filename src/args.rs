@@ -8,7 +8,7 @@ pub struct SandboxArgs {
     pub beach_type: String,
 
     /// Search for Environment
-    #[clap(short, long, default_value = "")]
+    #[clap(short = 'S', long, default_value = "")]
     pub search: String,
 
     /// Search for Environment
