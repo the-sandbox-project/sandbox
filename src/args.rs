@@ -3,9 +3,9 @@ use clap::Parser;
 #[derive(Debug, Parser)]
 #[clap(author, version, about)]
 pub struct SandboxArgs {
-    /// Create a New Beach
+    /// Create a New Environment
     #[clap(short = 'n', long = "new", default_value = "")]
-    pub beach_type: String,
+    pub new: String,
 
     /// Search for Environment
     #[clap(short = 'S', long, default_value = "")]
