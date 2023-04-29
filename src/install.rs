@@ -1,4 +1,3 @@
-use std::process::exit;
 use std::path::Path;
 
 use crate::{get_path, id_is_valid, download::download_environment};
@@ -7,9 +6,8 @@ pub async fn install_environment(id: String) {
     if id_is_valid(id.clone()) {
         if in_system(id.clone()) {
             println!("You already have {} installed on your system!", id);
-            exit(0)
         } else {
-            download_environment(id).await.unwrap()
+            download_environment(id.clone()).await.unwrap();
         }
     } else {
            println!("The environment {} does not exist!", id)
