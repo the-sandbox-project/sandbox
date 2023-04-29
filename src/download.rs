@@ -12,6 +12,7 @@ use reqwest::Client;
 use flate2::read::GzDecoder;
 use tar::Archive;
 use indicatif::{ProgressBar, ProgressState, ProgressStyle};
+use colored::Colorize;
 
 use crate::get_path;
 
@@ -63,7 +64,7 @@ pub async fn download_environment(id: String) -> Result<(), Box<dyn Error>> {
         archive.unpack(&unzip_path)?;
         fs::remove_file(&download_path)?;
 
-        println!("Installed {}! Test it out with: sandbox --new {}", id, id)
+        println!("Installed {}! Test it out with: sandbox --new {}", id.bright_green(), id.bright_green())
     }
     Ok(())
 }
