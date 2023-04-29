@@ -1,16 +1,18 @@
 use std::path::Path;
 
+use colored::Colorize;
+
 use crate::{get_path, id_is_valid, download::download_environment};
 
 pub async fn install_environment(id: String) {
     if id_is_valid(id.clone()).await {
         if in_system(id.clone()).await {
-            println!("You already have {} installed on your system!", id);
+            println!("You already have {} installed on your system!", id.bright_green());
         } else {
             download_environment(id.clone()).await.unwrap();
         }
     } else {
-           println!("The environment {} does not exist!", id)
+           println!("The environment ({}) does {} exist!", id.bright_green(), "not".red())
     }
 }
 
