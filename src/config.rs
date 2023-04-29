@@ -21,7 +21,7 @@ pub fn read_config_file() -> Result<Config, String> {
             Ok(config)
         }, 
         "windows" => { 
-            let config = get_config_windows();
+            let config = get_config_windows().unwrap();
             Ok(config)
         }
         _ => {
@@ -48,7 +48,7 @@ fn get_config_windows() -> Result<Config, String> {
     let appdata = std::env::var("APPDATA").unwrap();
 
     let file_path = format!("{}/sandbox/", appdata);
-    env::set_current_dir(file_path);
+    env::set_current_dir(file_path).unwrap();
 
     let mut file = File::open("sandbox.yml").map_err(|_| "We cannot read the sandbox.yml! Does it exist?".to_string())?;
     let mut contents = String::new();
