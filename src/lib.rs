@@ -5,26 +5,28 @@ mod environment;
 mod search;
 mod install;
 mod download;
+mod new;
 
-use std::fs;
+use std::error::Error;
 
 use args::SandboxArgs;
 use search::search;
-use environment::setup_environment;
 use install::install_environment;
+use new::create_new_environment;
 
 use clap::Parser;
 use serde_yaml::{Value, Mapping};
+use reqwest::Url;
 
 pub async fn run() { 
     let args = SandboxArgs::parse();
 
-    if !args.search.is_empty() {
-        search(args.search)
+    if !args.new.is_empty() {
+        create_new_environment(args.new).await
     }
 
-    if !args.beach_type.is_empty() {
-        setup_environment(args.beach_type)
+    if !args.search.is_empty() {
+        search(args.search).await
     }
 
     if !args.install.is_empty() {
@@ -32,19 +34,21 @@ pub async fn run() {
     }
 }
 
-pub fn get_templates_mapping() -> Mapping {
-    let sandbox_templates_path = "../sandbox-templates/sandbox-templates.yml";
-    let file_contents = fs::read_to_string(sandbox_templates_path).unwrap();
-    let templates: Value = serde_yaml::from_str(&file_contents).unwrap();
+pub async fn get_templates_mapping() -> Result<Mapping, Box<dyn Error>> {
+    let url = Url::parse("https://raw.githubusercontent.com/the-sandbox-project/sandbox-templates/master/sandbox-templates.yml")?;
+    let response = reqwest::get(url).await?.text().await?;
+
+    let templates: Value = serde_yaml::from_str(response.as_str()).unwrap();
 
     if let Some(languages) = templates["languages"].as_mapping() {
-        return languages.to_owned()
+        Ok(languages.to_owned())
+    } else {
+        Ok(Mapping::new())
     }
-    Mapping::new()
 }
  
-pub fn get_title(id: String) -> String {
-    for (_language, project_list) in get_templates_mapping() {
+pub async fn get_title(id: String) -> String {
+    for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
                 let path = list["title"].as_str().unwrap().to_string();
@@ -55,8 +59,8 @@ pub fn get_title(id: String) -> String {
     String::new()
 }
 
-pub fn get_description(id: String) -> String {
-    for (_language, project_list) in get_templates_mapping() {
+pub async fn get_description(id: String) -> String {
+    for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
                 let path = list["description"].as_str().unwrap().to_string();
@@ -67,8 +71,8 @@ pub fn get_description(id: String) -> String {
     String::new()
 }
 
-pub fn get_path(id: String) -> String {
-    for (_language, project_list) in get_templates_mapping() {
+pub async fn get_path(id: String) -> String {
+    for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
                 let path = list["path"].as_str().unwrap().to_string();
@@ -79,8 +83,8 @@ pub fn get_path(id: String) -> String {
     String::new()
 }
 
-pub fn get_keywords(id: String) -> String {
-    for (_language, project_list) in get_templates_mapping() {
+pub async fn get_keywords(id: String) -> String {
+    for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
                 let path = list["keywords"].as_str().unwrap().to_string();
@@ -91,8 +95,8 @@ pub fn get_keywords(id: String) -> String {
     String::new()
 }
 
-pub fn get_project_object(id: String) -> Value {
-    for (_language, project_list) in get_templates_mapping() {
+pub async fn get_project_object(id: String) -> Value {
+    for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
                 return list.to_owned()
@@ -102,8 +106,8 @@ pub fn get_project_object(id: String) -> Value {
     Value::Null
 }
 
-pub fn id_is_valid(id: String) -> bool{
-    for (_language, project_list) in get_templates_mapping() {
+pub async fn id_is_valid(id: String) -> bool{
+    for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(_) = project.get(&id) {
                 return true
