@@ -3,6 +3,8 @@
 # Sandbox 
 > Welcome to the Sandbox Project, a way to test different programming languages and projects
 
+[![asciicast](https://asciinema.org/a/kFOxcFwQDuUXJbHQAayYfoQeQ.svg](https://asciinema.org/a/kFOxcFwQDuUXJbHQAayYfoQeQ)
+
 Table of Contents
 ========
  * [Installation](#installation)
