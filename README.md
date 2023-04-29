@@ -1,7 +1,6 @@
 <img src="https://user-images.githubusercontent.com/98240335/234269982-b28309a1-7ad6-4074-be70-6b260c8d625d.png" align="right" />
 
 # Sandbox 
-[![GitHub Actions][github-actions-badge]](https://github.com/the-sandbox-project/sandbox/actions)
 > Welcome to the Sandbox Project, a way to test different programming languages and projects
 
 Table of Contents
