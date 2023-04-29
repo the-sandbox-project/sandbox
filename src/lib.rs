@@ -17,7 +17,6 @@ use clap::Parser;
 use serde_yaml::{Value, Mapping};
 
 pub async fn run() { 
-    let a = get_path("go-min".to_string());
     let args = SandboxArgs::parse();
 
     if !args.search.is_empty() {
@@ -33,13 +32,6 @@ pub async fn run() {
     }
 }
 
-pub fn get_projects_list() -> Mapping {
-    for (_, projects) in get_templates_mapping() {
-        return projects.as_mapping().unwrap().to_owned()
-    }
-    Mapping::new()
-}
-
 pub fn get_templates_mapping() -> Mapping {
     let sandbox_templates_path = "../sandbox-templates/sandbox-templates.yml";
     let file_contents = fs::read_to_string(sandbox_templates_path).unwrap();
@@ -50,57 +42,73 @@ pub fn get_templates_mapping() -> Mapping {
     }
     Mapping::new()
 }
-
+ 
 pub fn get_title(id: String) -> String {
-    for (project_id, project_object) in get_projects_list() {
-        if project_id.as_str().unwrap() == id {
-            return project_object["title"].as_str().unwrap().to_string();
-        } 
-    }
+    for (_language, project_list) in get_templates_mapping() {
+        if let Some(project) = project_list.as_mapping() {
+            if let Some(list) = project.get(&id) {
+                let path = list["title"].as_str().unwrap().to_string();
+                return path
+            };
+        }
+    } 
     String::new()
 }
 
 pub fn get_description(id: String) -> String {
-    for (project_id, project_object) in get_projects_list() {
-        if project_id.as_str().unwrap() == id {
-            return project_object["description"].as_str().unwrap().to_string();
-        } 
+    for (_language, project_list) in get_templates_mapping() {
+        if let Some(project) = project_list.as_mapping() {
+            if let Some(list) = project.get(&id) {
+                let path = list["description"].as_str().unwrap().to_string();
+                return path
+            };
+        }
     } 
     String::new()
 }
 
 pub fn get_path(id: String) -> String {
-    for (project_id, project_object) in get_projects_list() {
-        if project_id.as_str().unwrap() == id {
-            return project_object["path"].as_str().unwrap().to_string();
-        } 
+    for (_language, project_list) in get_templates_mapping() {
+        if let Some(project) = project_list.as_mapping() {
+            if let Some(list) = project.get(&id) {
+                let path = list["path"].as_str().unwrap().to_string();
+                return path
+            };
+        }
     } 
     String::new()
 }
 
 pub fn get_keywords(id: String) -> String {
-    for (project_id, project_object) in get_projects_list() {
-        if project_id.as_str().unwrap() == id {
-            return project_object["path"].as_str().unwrap().to_string();
-        } 
-    }
+    for (_language, project_list) in get_templates_mapping() {
+        if let Some(project) = project_list.as_mapping() {
+            if let Some(list) = project.get(&id) {
+                let path = list["keywords"].as_str().unwrap().to_string();
+                return path
+            };
+        }
+    } 
     String::new()
 }
 
 pub fn get_project_object(id: String) -> Value {
-    for (project_id, project_object) in get_projects_list() {
-        if project_id.as_str().unwrap() == id {
-            return project_object.to_owned()
-        } 
-    }
+    for (_language, project_list) in get_templates_mapping() {
+        if let Some(project) = project_list.as_mapping() {
+            if let Some(list) = project.get(&id) {
+                return list.to_owned()
+            };
+        }
+    } 
     Value::Null
 }
 
-pub fn id_is_valid(id: String) -> bool {
-    for (project_id, _) in get_projects_list() {
-        if project_id.as_str().unwrap() == id {
-            return true
+pub fn id_is_valid(id: String) -> bool{
+    for (_language, project_list) in get_templates_mapping() {
+        if let Some(project) = project_list.as_mapping() {
+            if let Some(_) = project.get(&id) {
+                return true
+            };
         }
-    }
+    } 
     false
 }

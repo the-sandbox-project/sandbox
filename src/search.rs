@@ -1,4 +1,5 @@
-use crate::{get_projects_list, install::in_system, get_templates_mapping};
+use crate::install::in_system;
+use crate::get_templates_mapping;
 
 pub fn search(query: String) {
     println!("Environments That Match Query {}\n", query);
