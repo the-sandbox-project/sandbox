@@ -16,7 +16,7 @@ pub struct EditorConfig {
 
 pub fn read_config_file() -> Result<Config, String> { 
     match env::consts::OS {
-        "linux" => {
+        "linux" | "darwin" => {
             let config = get_config_linux().unwrap();
             Ok(config)
         }, 
