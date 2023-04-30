@@ -5,6 +5,7 @@ use std::path::Path;
 use std::thread;
 use std::time::Duration;
 use std::fs;
+use std::env;
 use std::{cmp::min, fmt::Write};
 
 
@@ -17,7 +18,15 @@ use colored::Colorize;
 use crate::get_path;
 
 pub async fn download_environment(id: String) -> Result<(), Box<dyn Error>> {
-    let base_path = "/usr/share/sandbox/beaches/";
+    let base_path = match env::consts::OS {
+        "windows" => {
+            let appdata = std::env::var("appdata").unwrap();
+            let beaches_path = format!("{}/sandbox/beaches/", appdata);
+            beaches_path
+        }
+        _ => "/usr/share/sandbox/beaches/".to_string()
+    };
+
     let environment_path = get_path(id.clone()).await;
 
     let download_url = format!("https://github.com/the-sandbox-project/sandbox-templates/raw/master/{}", environment_path);
