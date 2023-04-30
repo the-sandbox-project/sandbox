@@ -47,7 +47,9 @@ pub async fn get_templates_mapping() -> Result<Mapping, Box<dyn Error>> {
     }
 }
  
-pub async fn get_title(id: String) -> String {
+pub async fn get_title(id: impl Into<String>) -> String {
+    let id = id.into();
+
     for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
@@ -59,7 +61,9 @@ pub async fn get_title(id: String) -> String {
     String::new()
 }
 
-pub async fn get_description(id: String) -> String {
+pub async fn get_description(id: impl Into<String>) -> String {
+    let id = id.into();
+
     for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
@@ -71,7 +75,9 @@ pub async fn get_description(id: String) -> String {
     String::new()
 }
 
-pub async fn get_path(id: String) -> String {
+pub async fn get_path(id: impl Into<String>) -> String {
+    let id = id.into();
+
     for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
@@ -83,7 +89,9 @@ pub async fn get_path(id: String) -> String {
     String::new()
 }
 
-pub async fn get_keywords(id: String) -> String {
+pub async fn get_keywords(id: impl Into<String>) -> String {
+    let id = id.into();
+
     for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
@@ -95,7 +103,9 @@ pub async fn get_keywords(id: String) -> String {
     String::new()
 }
 
-pub async fn get_project_object(id: String) -> Value {
+pub async fn get_project_object(id: impl Into<String>) -> Value {
+    let id = id.into();
+
     for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
@@ -106,7 +116,9 @@ pub async fn get_project_object(id: String) -> Value {
     Value::Null
 }
 
-pub async fn id_is_valid(id: String) -> bool{
+pub async fn id_is_valid(id: impl Into<String>) -> bool{
+    let id = id.into();
+
     for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(_) = project.get(&id) {
