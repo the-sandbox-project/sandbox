@@ -4,14 +4,18 @@ mod args;
 mod environment;
 mod search;
 mod install;
+mod uninstall;
 mod download;
 mod new;
 
 use std::error::Error;
+use std::path::Path;
+use std::env;
 
 use args::SandboxArgs;
 use search::search;
 use install::install_environment;
+use uninstall::uninstall_environment;
 use new::create_new_environment;
 
 use clap::Parser;
@@ -32,6 +36,10 @@ pub async fn run() {
     if !args.install.is_empty() {
         install_environment(args.install).await;
     }
+
+    if !args.uninstall.is_empty() {
+        uninstall_environment(args.uninstall).await;
+    }
 }
 
 pub async fn get_templates_mapping() -> Result<Mapping, Box<dyn Error>> {
@@ -47,7 +55,9 @@ pub async fn get_templates_mapping() -> Result<Mapping, Box<dyn Error>> {
     }
 }
  
-pub async fn get_title(id: String) -> String {
+pub async fn get_title(id: impl Into<String>) -> String {
+    let id = id.into();
+
     for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
@@ -59,7 +69,9 @@ pub async fn get_title(id: String) -> String {
     String::new()
 }
 
-pub async fn get_description(id: String) -> String {
+pub async fn get_description(id: impl Into<String>) -> String {
+    let id = id.into();
+
     for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
@@ -71,7 +83,9 @@ pub async fn get_description(id: String) -> String {
     String::new()
 }
 
-pub async fn get_path(id: String) -> String {
+pub async fn get_path(id: impl Into<String>) -> String {
+    let id = id.into();
+
     for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
@@ -83,7 +97,9 @@ pub async fn get_path(id: String) -> String {
     String::new()
 }
 
-pub async fn get_keywords(id: String) -> String {
+pub async fn get_keywords(id: impl Into<String>) -> String {
+    let id = id.into();
+
     for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
@@ -95,7 +111,9 @@ pub async fn get_keywords(id: String) -> String {
     String::new()
 }
 
-pub async fn get_project_object(id: String) -> Value {
+pub async fn get_project_object(id: impl Into<String>) -> Value {
+    let id = id.into();
+
     for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(list) = project.get(&id) {
@@ -106,7 +124,9 @@ pub async fn get_project_object(id: String) -> Value {
     Value::Null
 }
 
-pub async fn id_is_valid(id: String) -> bool{
+pub async fn id_is_valid(id: impl Into<String>) -> bool{
+    let id = id.into();
+
     for (_language, project_list) in get_templates_mapping().await.unwrap() {
         if let Some(project) = project_list.as_mapping() {
             if let Some(_) = project.get(&id) {
@@ -115,4 +135,29 @@ pub async fn id_is_valid(id: String) -> bool{
         }
     } 
     false
+}
+
+pub async fn in_system(id: impl Into<String>) -> bool {
+    let id = id.into();
+    
+    let base_path = match env::consts::OS {
+        "windows" => {
+            let appdata = std::env::var("appdata").unwrap();
+            let beaches_path = format!("{}/sandbox/beaches/", appdata);
+            beaches_path
+        }
+        _ => "/usr/share/sandbox/beaches/".to_string(),
+    };
+
+    let path = get_path(id.clone()).await;
+    let environment_path = path.split("/").collect::<Vec<&str>>()[0].to_owned() + "/" + &id;
+    let formatted_path = format!("{}{}", base_path, environment_path);
+
+    let path = Path::new(&formatted_path);
+
+    if path.exists() && path.is_dir() {
+        true
+    } else {
+        false
+    }
 }

@@ -1,4 +1,4 @@
-use crate::install::in_system;
+use crate::in_system;
 use crate::get_templates_mapping;
 
 use colored::Colorize;

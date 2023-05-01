@@ -17,7 +17,7 @@ use colored::Colorize;
 
 use crate::get_path;
 
-pub async fn download_environment(id: String) -> Result<(), Box<dyn Error>> {
+pub async fn install(id: String) -> Result<(), Box<dyn Error>> {
     let base_path = match env::consts::OS {
         "windows" => {
             let appdata = std::env::var("appdata").unwrap();
