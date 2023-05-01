@@ -1,6 +1,6 @@
 use crate::id_is_valid;
 use crate::environment::open_environment;
-use crate::install::in_system;
+use crate::in_system;
 
 use colored::Colorize;
 
@@ -12,6 +12,6 @@ pub async fn create_new_environment(environment: String) {
             println!("You do {} have {} installed! Install it with:\nsandbox --install {}", "not".red(), environment.bright_green(), environment.bright_green())
         }
     } else {
-        println!("The environment {} does {} exist... You can search for an environment with\nsandbox --search {}", environment.bright_green(), "not".red(), environment.bright_green())
+       println!("The environment ({}) does {} exist! You can search for an environment with\nsandbox --search {}", environment.bright_green(), "not".red(), environment.bright_green());
     }
 }
