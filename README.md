@@ -14,7 +14,17 @@ Table of Contents
 
 Installation
 ========
-Coming Soon...
+### Windows
+Head to the [releases](https://github.com/the-sandbox-project/sandbox/releases) page and download the [MSI build](https://github.com/the-sandbox-project/sandbox/releases/download/v1.0.1/sandbox-0.1.1-x86_64.msi). From there, install it like any other program!
+
+### MacOS / Linux
+
+> **Note**
+> Plans have been made to add sandbox to [Homebrew](https://brew.sh) and the [AUR](https://aur.archlinux.org) 
+```
+$ wget https://github.com/the-sandbox-project/sandbox/releases/download/v1.0.1/sandbox -O ~/.local/bin
+```
+
 
 Usage
 ========
