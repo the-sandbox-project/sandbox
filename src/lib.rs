@@ -5,6 +5,7 @@ mod environment;
 mod search;
 mod install;
 mod uninstall;
+mod reinstall;
 mod download;
 mod cache;
 mod new;
@@ -17,6 +18,7 @@ use args::SandboxArgs;
 use search::search;
 use install::install_environment;
 use uninstall::uninstall_environment;
+use reinstall::reinstall_environment;
 use new::create_new_environment;
 use cache::clear_cache;
 
@@ -41,6 +43,10 @@ pub async fn run() {
 
     if !args.uninstall.is_empty() {
         uninstall_environment(args.uninstall).await;
+    }
+
+    if !args.reinstall.is_empty() {
+        reinstall_environment(args.reinstall).await;
     }
 
     if args.clearcache {
@@ -148,7 +154,7 @@ pub async fn in_system(id: impl Into<String>) -> bool {
     
     let base_path = get_beaches_path();        
 
-    let path = get_path(id.clone()).await;
+    let path = get_path(&id).await;
     let environment_path = path.split("/").collect::<Vec<&str>>()[0].to_owned() + "/" + &id;
     let formatted_path = format!("{}{}", base_path, environment_path);
 
