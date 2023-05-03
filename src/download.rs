@@ -17,25 +17,25 @@ use colored::Colorize;
 use crate::get_beaches_path;
 use crate::get_cache_path;
 use crate::get_path;
-use crate::cache;
+use crate::cache::{self, in_cache};
 
-pub async fn install(id: String) -> Result<(), Box<dyn Error>> {
+pub async fn install(id: impl Into<String>) -> Result<(), Box<dyn Error>> {
+    let id = id.into();
+
     let base_path = get_beaches_path();
-    let environment_path = get_path(id.clone()).await;
+    let environment_path = get_path(&id).await;
 
     let download_url = format!("https://github.com/the-sandbox-project/sandbox-templates/raw/master/{}", environment_path);
     let download_path = format!("{}{}", base_path, environment_path);
 
     let tar_name = environment_path.split('/').last().unwrap();
     
-
     cache::ensure_installed().await;
     let cache_path = get_cache_path();
 
     let formatted_cache_path = format!("{}{}",  cache_path, tar_name);
 
-    let tar_in_cache = Path::new(&formatted_cache_path).exists();
-    if tar_in_cache {
+    if in_cache(&id).await {
         println!("{} found in {}! Installing from {}...", id.blue(), "Cache".bright_green(), "Cache".bright_green());
 
         let language_path = Path::new(&download_path).parent().unwrap().to_str().unwrap();
