@@ -22,7 +22,7 @@ Head to the [releases](https://github.com/the-sandbox-project/sandbox/releases) 
 > **Note**
 > Plans have been made to add sandbox to [Homebrew](https://brew.sh) and the [AUR](https://aur.archlinux.org) 
 ```
-$ wget https://github.com/the-sandbox-project/sandbox/releases/download/v1.0.1/sandbox -O ~/.local/bin
+$ wget https://github.com/the-sandbox-project/sandbox/releases/download/v0.2.1/sandbox -O ~/.local/bin
 ```
 
 
@@ -35,11 +35,14 @@ This is the default Help command, running will produce:
 Usage: sandbox [OPTIONS]
 
 Options:
-  -n, --new <NEW>          Create a New Environment [default: ]
-  -S, --search <SEARCH>    Search for Environment [default: ]
-  -I, --install <INSTALL>  Search for Environment [default: ]
-  -h, --help               Print help
-  -V, --version            Print version
+  -n, --new <NEW>              Create a New Environment [default: ]
+  -S, --search <SEARCH>        Search for Environment [default: ]
+  -I, --install <INSTALL>      Search for Environment [default: ]
+  -U, --uninstall <UNINSTALL>  Create a New Environment [default: ]
+  -R, --reinstall <REINSTALL>  Reinstall an Environment [default: ]
+  -C, --clearcache             Clear the Install Cache
+  -h, --help                   Print help
+  -V, --version                Print version
 ```
 
 ### New

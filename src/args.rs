@@ -20,7 +20,7 @@ pub struct SandboxArgs {
     pub uninstall: String,
 
     /// Reinstall an Environment
-    #[clap(short = 'R', long)]
+    #[clap(short = 'R', long, default_value = "")]
     pub reinstall: String,
 
     /// Clear the Install Cache
