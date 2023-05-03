@@ -1,13 +1,13 @@
 [package]
 name = "sandbox"
-version = "0.1.1"
+version = "0.2.1"
 edition = "2021"
 authors = ["WillKirkmanM <WillKirkmanMoller@gmail.com>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { version = "4.2.4", features = ["derive"] }
+clap = { version = "4.2.7", features = ["derive"] }
 colored = "2.0.0"
 flate2 = "1.0.26"
 indicatif = "0.17.3"
