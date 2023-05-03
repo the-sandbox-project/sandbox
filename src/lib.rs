@@ -6,6 +6,7 @@ mod search;
 mod install;
 mod uninstall;
 mod download;
+mod cache;
 mod new;
 
 use std::error::Error;
@@ -17,6 +18,7 @@ use search::search;
 use install::install_environment;
 use uninstall::uninstall_environment;
 use new::create_new_environment;
+use cache::clear_cache;
 
 use clap::Parser;
 use serde_yaml::{Value, Mapping};
@@ -39,6 +41,10 @@ pub async fn run() {
 
     if !args.uninstall.is_empty() {
         uninstall_environment(args.uninstall).await;
+    }
+
+    if args.clearcache {
+        clear_cache().await;
     }
 }
 
@@ -140,14 +146,7 @@ pub async fn id_is_valid(id: impl Into<String>) -> bool{
 pub async fn in_system(id: impl Into<String>) -> bool {
     let id = id.into();
     
-    let base_path = match env::consts::OS {
-        "windows" => {
-            let appdata = std::env::var("appdata").unwrap();
-            let beaches_path = format!("{}/sandbox/beaches/", appdata);
-            beaches_path
-        }
-        _ => "/usr/share/sandbox/beaches/".to_string(),
-    };
+    let base_path = get_beaches_path();        
 
     let path = get_path(id.clone()).await;
     let environment_path = path.split("/").collect::<Vec<&str>>()[0].to_owned() + "/" + &id;
@@ -159,5 +158,31 @@ pub async fn in_system(id: impl Into<String>) -> bool {
         true
     } else {
         false
+    }
+}
+
+pub fn get_beaches_path() -> String {
+    match env::consts::OS {
+        "windows" => {
+            let appdata = env::var("APPDATA").unwrap();
+            let beaches_path = format!("{}/sandbox/beaches/", appdata);
+            beaches_path
+        }
+        _ => "/usr/share/sandbox/beaches/".to_string(), 
+    }
+}
+
+pub fn get_cache_path() -> String {
+    match env::consts::OS {
+        "windows" => {
+            let appdata = env::var("LOCALAPPDATA").unwrap();
+            let beaches_path = format!("{}/Temp/sandbox/", appdata);
+            beaches_path
+        }
+        _ => { 
+            let home_path = env::var("HOME").unwrap();
+            let cache_path = format!("{}/.cache/sandbox/", home_path);
+            cache_path
+        }
     }
 }
