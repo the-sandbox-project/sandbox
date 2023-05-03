@@ -29,7 +29,7 @@ pub async fn uninstall(environment: impl Into<String>) {
 
     let base_path = get_beaches_path();
 
-    let path = get_path(environment.clone()).await;
+    let path = get_path(&environment).await;
     let environment_path = path.split("/").collect::<Vec<&str>>()[0].to_owned() + "/" + &environment;
 
     let formatted_path = format!("{}{}", base_path, environment_path);
