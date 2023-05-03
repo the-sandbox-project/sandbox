@@ -7,7 +7,7 @@ use crate::get_path;
 pub async fn open_environment(environment: String) {
     let editor = get_editor(); 
 
-    let path = get_path(environment.clone()).await;
+    let path = get_path(&environment).await;
     let environment_path = path.split("/").collect::<Vec<&str>>()[0].to_owned() + "/" + &environment;
 
     let beaches_path = match env::consts::OS {
