@@ -18,5 +18,9 @@ pub struct SandboxArgs {
     /// Search for Environment
     #[clap(short = 'I', long, default_value = "")]
     pub install: String,
+
+    /// Clear the Install Cache
+    #[clap(short = 'C', long)]
+    pub clearcache: bool,
 }
 
