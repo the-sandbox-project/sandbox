@@ -1,7 +1,6 @@
-use std::env;
 use std::io::{stdin, stdout, Write};
 
-use crate::{get_path, id_is_valid, in_system};
+use crate::{get_path, get_beaches_path, id_is_valid, in_system};
 
 use colored::Colorize;
 use tokio::fs;
@@ -28,14 +27,7 @@ pub async fn uninstall_environment(environment: impl Into<String>) {
 pub async fn uninstall(environment: impl Into<String>) {
     let environment = environment.into();
 
-    let base_path = match env::consts::OS {
-        "windows" => {
-            let appdata = std::env::var("appdata").unwrap();
-            let beaches_path = format!("{}/sandbox/beaches/", appdata);
-            beaches_path
-        }
-        _ => "/usr/share/sandbox/beaches/".to_string(),
-    };
+    let base_path = get_beaches_path();
 
     let path = get_path(environment.clone()).await;
     let environment_path = path.split("/").collect::<Vec<&str>>()[0].to_owned() + "/" + &environment;
